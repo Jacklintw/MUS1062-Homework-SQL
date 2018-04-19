@@ -11,7 +11,7 @@ namespace MUS1062_Homework_SQL
        
         static void Main(string[] args)
         {
-            DBHelper<Pharmacy> jackDB = new JackDBHelper();
+            DBHelper<UVIResource> jackDB = new JackDBHelper();
             jackDB.ShowData(jackDB.ReadData("地址縣市別", "臺南市"));
             Console.ReadKey();
         }

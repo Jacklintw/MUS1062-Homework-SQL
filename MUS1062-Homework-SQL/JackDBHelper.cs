@@ -8,32 +8,32 @@ using System.Xml.Linq;
 
 namespace MUS1062_Homework_SQL
 {
-    class JackDBHelper : DBHelper<Pharmacy>
+    class JackDBHelper : DBHelper<UVIResource>
     {
         static int count = 0;
         SqlConnection connection = new SqlConnection(@"Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = HomeworkDB; Integrated Security = True; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False");
-        public void InsertData(Pharmacy ph)
+        public void InsertData(UVIResource ph)
         {
             count++;
             connection.Open();
             SqlCommand cmd = connection.CreateCommand();
             cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = string.Format($"INSERT INTO Pharmacy (Id,城市,發布機關,發布地區,紫外線指數,發布時間) " +
+            cmd.CommandText = string.Format($"INSERT INTO UVIResource (Id,城市,發布機關,發布地區,紫外線指數,發布時間) " +
                                                         $"values ('{count}',N'{ph.城市}',N'{ph.發布機關}',N'{ph.發布地區}',N'{ph.紫外線指數}',N'{ph.發布時間}')");
             cmd.ExecuteNonQuery();
             connection.Close();
         }
-        public List<Pharmacy> ReadData(String col_name, String name)
+        public List<UVIResource> ReadData(String col_name, String name)
         {
             connection.Open();
             SqlCommand cmd = connection.CreateCommand();
             cmd.CommandType = System.Data.CommandType.Text;
-            cmd.CommandText = string.Format($"SELECT * FROM Pharmacy WHERE {col_name}=N'{name}'");
+            cmd.CommandText = string.Format($"SELECT * FROM UVIResource WHERE {col_name}=N'{name}'");
             SqlDataReader reader = cmd.ExecuteReader();
-            List<Pharmacy> phar = new List<Pharmacy>();
+            List<UVIResource> phar = new List<UVIResource>();
             while (reader.Read())
             {
-                Pharmacy ph = new Pharmacy
+                UVIResource ph = new UVIResource
                 {
                     城市 = reader[1].ToString(),
                     發布機關 = reader[2].ToString(),
@@ -46,12 +46,12 @@ namespace MUS1062_Homework_SQL
             connection.Close();
             return phar;
         }
-        public List<Pharmacy> Xml_Load()
+        public List<UVIResource> Xml_Load()
         {
             XElement xml = XElement.Load("datas.xml");
-            List<Pharmacy> phar = new List<Pharmacy>();
+            List<UVIResource> phar = new List<UVIResource>();
             xml.Descendants("row").ToList().ForEach(row => {
-                Pharmacy ph = new Pharmacy
+                UVIResource ph = new UVIResource
                 {
                     城市 = row.Element("Col1").Value,
                     發布機關 = row.Element("Col2").Value,
@@ -63,7 +63,7 @@ namespace MUS1062_Homework_SQL
             });
             return phar;
         }
-        public void ShowData(List<Pharmacy> list)
+        public void ShowData(List<UVIResource> list)
         {
             list.ForEach(ph => {
                  Console.WriteLine("城市:{0}\n地區:{1}\nUVI:{2}", ph.城市, ph.發布地區, ph.紫外線指數);
